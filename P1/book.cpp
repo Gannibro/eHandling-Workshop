@@ -1,6 +1,7 @@
 #include "Book.h"
 #include <sstream>
 #include <iomanip>
+#include <iostream>
 
 namespace seneca {
 
@@ -14,40 +15,31 @@ Book::Book(const std::string& strBook) {
         token.erase(token.find_last_not_of(" ") + 1);
 
         if (!token.empty()) {
-            switch (index) {
-            case 0:
-                m_author = token;
-                break;
-            case 1:
-                m_title = token;
-                break;
-            case 2:
-                m_country = token;
-                break;
-            case 3:
-                try {
+            try {
+                switch (index) {
+                case 0:
+                    m_author = token;
+                    break;
+                case 1:
+                    m_title = token;
+                    break;
+                case 2:
+                    m_country = token;
+                    break;
+                case 3:
                     m_price = std::stod(token);
-                } catch (const std::invalid_argument& e) {
-                    m_price = 0.0; // Set a default value for invalid input
-                } catch (const std::out_of_range& e) {
-                    m_price = 0.0; // Set a default value for out-of-range input
-                }
-                break;
-            case 4:
-                try {
+                    break;
+                case 4:
                     m_year = std::stoi(token);
-                } catch (const std::invalid_argument& e) {
-                    m_year = 0; // Set a default value for invalid input
-                } catch (const std::out_of_range& e) {
-                    m_year = 0; // Set a default value for out-of-range input
+                    break;
+                case 5:
+                    m_description = token;
+                    break;
                 }
-                break;
-            case 5:
-                m_description = token;
-                break;
+            } catch (const std::exception& e) {
+                std::cerr << "Error parsing book details: " << e.what() << '\n';
             }
         }
-
         index++;
     }
 }

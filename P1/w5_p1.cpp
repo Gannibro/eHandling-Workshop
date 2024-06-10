@@ -4,14 +4,11 @@
 #include <vector>
 #include "Book.h"
 
-int cout = 0; // won't compile if headers don't follow convention regarding namespaces
-
 enum AppErrors {
     CannotOpenFile = 1, // An input file cannot be opened
     BadArgumentCount = 2, // The application didn't receive enough parameters
 };
 
-// ws books.txt
 int main(int argc, char** argv) {
     std::cout << "Command Line:\n";
     std::cout << "--------------------------\n";
@@ -26,18 +23,18 @@ int main(int argc, char** argv) {
         if (file.is_open()) {
             std::string line;
             while (getline(file, line)) {
-                if (line[0] != '#') {
+                if (!line.empty() && line[0] != '#') {
                     library.emplace_back(seneca::Book(line));
                 }
             }
             file.close();
         } else {
             std::cerr << "ERROR: Cannot open file '" << argv[1] << "'." << std::endl;
-            exit(AppErrors::CannotOpenFile);
+            return AppErrors::CannotOpenFile;
         }
     } else {
         std::cerr << "ERROR: Incorrect number of arguments.\n";
-        exit(AppErrors::BadArgumentCount);
+        return AppErrors::BadArgumentCount;
     }
 
     double usdToCadRate = 1.3;
@@ -71,5 +68,5 @@ int main(int argc, char** argv) {
     }
     std::cout << "-----------------------------------------\n";
 
-    return cout;
+    return 0;
 }
